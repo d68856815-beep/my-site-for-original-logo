@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo AI Detector | Рустамов Даниель</title>
+    <title>Logo AI & Portfolio | Рустамов Даниель</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,157 +19,139 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* Анимированный фон */
-        .bg-glow {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #050810 100%);
-            z-index: -1;
+        /* Навигация (Кнопки выбора) */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            background: rgba(5, 8, 16, 0.9);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        header {
-            padding: 100px 20px 50px;
-            text-align: center;
-        }
-
-        .badge {
-            font-family: 'Orbitron', sans-serif;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 5px 15px;
-            border-radius: 50px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-        }
-
-        h1 { font-family: 'Orbitron', sans-serif; font-size: 3rem; margin: 20px 0; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .author-box { margin-bottom: 40px; color: var(--secondary); font-weight: 300; }
-
-        /* СКАНЕР */
-        .scanner-container {
-            max-width: 600px;
-            margin: 0 auto 50px;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .upload-area {
-            border: 2px dashed rgba(0, 242, 255, 0.3);
-            padding: 40px;
-            border-radius: 15px;
+        .nav-btn {
+            background: transparent;
+            color: var(--secondary);
+            border: 1px solid var(--secondary);
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
         }
 
-        .upload-area:hover { background: rgba(0, 242, 255, 0.05); border-color: var(--accent); }
-
-        /* Луч сканера */
-        .scan-line {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: var(--accent);
-            box-shadow: 0 0 20px var(--accent);
-            display: none;
-            z-index: 10;
-        }
-
-        @keyframes scanMove {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        .btn {
+        .nav-btn.active {
             background: var(--accent);
             color: #000;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            transition: 0.3s;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
         }
 
-        .btn:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--accent); }
+        /* Секции */
+        .content-section { display: none; padding: 40px 20px; max-width: 800px; margin: 0 auto; }
+        .content-section.active { display: block; animation: fadeIn 0.5s ease; }
 
-        #result { margin-top: 20px; font-weight: bold; display: none; padding: 15px; border-radius: 10px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .footer {
-            text-align: center;
-            padding: 50px;
-            background: rgba(0,0,0,0.3);
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        /* Стиль AI Сканера */
+        .scanner-box { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(0, 242, 255, 0.2); text-align: center; }
+        .upload-area { border: 2px dashed var(--accent); padding: 40px; border-radius: 15px; margin: 20px 0; position: relative; overflow: hidden; }
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); box-shadow: 0 0 15px var(--accent); display: none; }
 
-        .contact-grid { display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
-        .contact-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid transparent; transition: 0.3s; }
-        .contact-link:hover { border-bottom: 1px solid var(--accent); }
+        /* Стиль Портфолио */
+        .portfolio-box { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; margin: 25px 0; border: 1px solid var(--accent); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
+        .contact-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-top: 15px; }
+        .contact-card a { color: var(--accent); text-decoration: none; display: block; margin: 10px 0; font-weight: bold; }
+
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: var(--accent); }
+        .info-text { color: var(--secondary); font-size: 0.9rem; margin-top: 5px; }
+
+        @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <div class="nav-container">
+        <button class="nav-btn active" onclick="showSection('detector', this)">1. AI Детектор</button>
+        <button class="nav-btn" onclick="showSection('portfolio', this)">2. Портфолио & Контакты</button>
+    </div>
 
-    <header>
-        <span class="badge">Попытка №5: AI Edition</span>
-        <h1>LOGO DETECTOR AI</h1>
-        <div class="author-box">
-            <p><strong>Рустамов Даниель</strong></p>
-            <p>Школа: Н.Ш.Л.И.Т. №5 | Класс: 6-В</p>
-        </div>
-    </header>
+    <section id="detector" class="content-section active">
+        <header>
+            <span style="color: var(--accent); font-size: 0.8rem; letter-spacing: 2px;">ПОПЫТКА №5</span>
+            <h1>LOGO DETECTOR AI</h1>
+            <p class="info-text">Рустамов Даниель | 6-В класс | Н.Ш.Л.И.Т. №5</p>
+        </header>
 
-    <main style="padding: 0 20px;">
-        <div class="scanner-container">
-            <div class="upload-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
+        <div class="scanner-box">
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                 <div class="scan-line" id="scanLine"></div>
-                <div id="uploadText">
-                    <p style="font-size: 1.5rem;">📥</p>
-                    <p>Нажми или перетащи логотип для проверки</p>
+                <div id="uploadPlaceholder">
+                    <p style="font-size: 2rem;">🖼️</p>
+                    <p>Нажми, чтобы загрузить логотип</p>
                 </div>
                 <img id="preview" style="display:none; width: 100%; border-radius: 10px;">
                 <input type="file" id="fileInput" hidden accept="image/*" onchange="handleFile(this.files[0])">
             </div>
-            
-            <button class="btn" onclick="startScan()">ЗАПУСТИТЬ АНАЛИЗ</button>
-            <div id="result"></div>
+            <button onclick="startScan()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:10px; font-family:'Orbitron'; font-weight:bold; cursor:pointer;">АНАЛИЗИРОВАТЬ</button>
+            <div id="result" style="margin-top:20px; padding:15px; display:none; border-radius:10px;"></div>
         </div>
-    </main>
+    </section>
 
-    <footer class="footer">
-        <p>Связь с разработчиком:</p>
-        <div style="font-size: 1.2rem; margin: 10px 0;">+996 501 37 98 01</div>
-        <div class="contact-grid">
-            <a href="https://www.tiktok.com/@d244512" class="contact-link">TikTok</a>
-            <a href="https://instagram.com/dani4.252" class="contact-link">Instagram</a>
-            <a href="mailto:d68856815@gmail.com" class="contact-link">Gmail</a>
+    <section id="portfolio" class="content-section">
+        <header>
+            <h1>МОЁ ПОРТФОЛИО</h1>
+            <p class="info-text">Работы и контакты разработчика</p>
+        </header>
+
+        <div class="portfolio-box">
+            <h3>Моя презентация (YouTube)</h3>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/VhYT_IdYoK4" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <div class="contact-card">
+                <h3>Связаться со мной:</h3>
+                <p style="font-size: 1.2rem; color: #fff; margin: 10px 0;">📞 +996 501 37 98 01</p>
+                <a href="https://www.tiktok.com/@d244512" target="_blank">📱 TikTok: @d244512</a>
+                <a href="https://instagram.com/dani4.252" target="_blank">📸 Instagram: dani4.252</a>
+                <a href="mailto:d68856815@gmail.com">📧 Gmail: d68856815@gmail.com</a>
+            </div>
+            
+            <p style="margin-top:20px; font-size:0.8rem; color:var(--secondary);">
+                Автор: Рустамов Даниель<br>
+                Школа: Н.Ш.Л.И.Т. №5, 6-В класс
+            </p>
         </div>
-        <p style="margin-top: 30px; font-size: 0.7rem; color: var(--secondary);">© 2026 Все права защищены. Дизайн от Даниеля.</p>
-    </footer>
+    </section>
 
     <script>
+        function showSection(sectionId, btn) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            btn.classList.add('active');
+        }
+
         function handleFile(file) {
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('preview').src = e.target.result;
                     document.getElementById('preview').style.display = 'block';
-                    document.getElementById('uploadText').style.display = 'none';
+                    document.getElementById('uploadPlaceholder').style.display = 'none';
                     document.getElementById('result').style.display = 'none';
                 }
                 reader.readAsDataURL(file);
@@ -177,36 +159,24 @@
         }
 
         function startScan() {
-            const file = document.getElementById('fileInput').files[0];
-            if (!file) {
-                alert("Сначала загрузи картинку логотипа!");
-                return;
-            }
-
+            if (!document.getElementById('fileInput').files[0]) return alert("Загрузите фото!");
             const scanLine = document.getElementById('scanLine');
-            const resultDiv = document.getElementById('result');
+            const result = document.getElementById('result');
             
             scanLine.style.display = 'block';
-            scanLine.style.animation = 'scanMove 2s infinite linear';
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = "Идет поиск в базе данных...";
-            resultDiv.style.color = "#94a3b8";
+            scanLine.style.animation = 'scanAnim 2s infinite linear';
+            result.style.display = 'block';
+            result.style.color = '#94a3b8';
+            result.innerHTML = "Сканирование базы данных AI...";
 
             setTimeout(() => {
-                scanLine.style.animation = 'none';
                 scanLine.style.display = 'none';
-                
-                // Случайный результат для красоты
-                const outcomes = [
-                    {text: "✅ ОРИГИНАЛ. Логотип найден в базе официальных брендов.", color: "#00ff88"},
-                    {text: "⚠️ ВНИМАНИЕ. Похожий дизайн уже существует. Низкая уникальность.", color: "#ffcc00"},
-                    {text: "❌ КОПИЯ. Данный логотип защищен авторским правом.", color: "#ff4444"}
-                ];
-                const final = outcomes[Math.floor(Math.random() * outcomes.length)];
-                
-                resultDiv.innerHTML = final.text;
-                resultDiv.style.color = final.color;
-                resultDiv.style.border = "1px solid " + final.color;
+                const res = ["✅ ОРИГИНАЛ", "⚠️ ПОХОЖИЙ ДИЗАЙН", "❌ КОПИЯ"];
+                const colors = ["#00ff88", "#ffcc00", "#ff4444"];
+                const idx = Math.floor(Math.random() * 3);
+                result.innerHTML = res[idx];
+                result.style.color = colors[idx];
+                result.style.border = "1px solid " + colors[idx];
             }, 3000);
         }
     </script>
